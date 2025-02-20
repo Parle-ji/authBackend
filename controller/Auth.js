@@ -4,14 +4,23 @@ const bcrypt = require("bcrypt");
 exports.signup = async (req, res) => {
   try {
     // get data from client
-    const { name, password, role, email } = req.body;
+    const { name, password, role, email, confirmPassword } = req.body;
 
     // check all data are full field
-    if (!name || !password || !role || !email) {
+    if (!name || !password || !role || !email || !confirmPassword) {
       return res.status(409).json({
         success: false,
         message: "all fields are required",
       });
+    }
+
+    //check password or confirm password are same or not
+
+    if (confirmPassword !== password) {
+      return res.status(400).json({
+        success:false,
+        message:'confirm password is not matched'
+      })
     }
 
     const existingUser = await User.findOne({ email }); // check user are already or not
@@ -44,12 +53,7 @@ exports.signup = async (req, res) => {
     });
 
     const result = await userData.save();
-    // const result = await User.create({
-    //   name,
-    //   email,
-    //   password: hashedPassword,
-    //   role,
-    // });
+
     res.status(200).json({
       success: true,
       data: result,

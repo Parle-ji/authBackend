@@ -15,15 +15,13 @@ const userScheama = new mongoose.Schema({
     type: String,
     required: true,
   },
-  // confirmPassword: {
-  //   type: String,
-  //   required: true,
-  // },
-  role:{
-    type:String,
-    enum:["admin","student","visitor"],
-  }
+  confirmPassword: {
+    type: String,
+  },
+  role: {
+    type: String,
+    enum: ["admin", "student", "visitor"],
+  },
 });
 
-
-module.exports = mongoose.model("User",userScheama)
+module.exports = mongoose.model("User", userScheama);
