@@ -14,15 +14,6 @@ exports.signup = async (req, res) => {
       });
     }
 
-    //check password or confirm password are same or not
-
-    if (confirmPassword !== password) {
-      return res.status(400).json({
-        success: false,
-        message: "confirm password is not matched",
-      });
-    }
-
     const existingUser = await User.findOne({ email }); // check user are already or not
 
     if (existingUser) {
@@ -122,7 +113,7 @@ exports.login = async (req, res) => {
       };
       //adding cookie
       res
-        .cookie("Cookies", token, option)
+        .cookie("cookies", token, option)
         .status(200)
         .json({
           success: true,
