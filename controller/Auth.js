@@ -4,10 +4,10 @@ const bcrypt = require("bcrypt");
 exports.signup = async (req, res) => {
   try {
     // get data from client
-    const { name, password, role, email, confirmPassword } = req.body;
+    const { name, password, role, email } = req.body;
 
     // check all data are full field
-    if (!name || !password || !role || !email || !confirmPassword) {
+    if (!name || !password || !role || !email) {
       return res.status(409).json({
         success: false,
         message: "all fields are required",
@@ -115,7 +115,6 @@ exports.login = async (req, res) => {
       user = user.toObject();
       user.token = token;
       user.password = null;
-
 
       const option = {
         maxAge: 4 * 60 * 60 * 1000,
