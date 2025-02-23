@@ -3,7 +3,14 @@ require("dotenv").config();
 
 exports.autho = (req, res, next) => {
   try {
-    const { token } = req.body;
+    // console.log("cookies:-", req.cookies.cookies)
+    // console.log("header:-", req.header("Authorization").replace("Bearer ", ""))
+
+    const bodyToken = req.body.token;
+    const cookie = req.cookies?.cookies;
+    const header = req.header("Authorization")?.replace("Bearer ", "");
+
+    const token = bodyToken || cookie || header;
 
     if (!token) {
       return res.status(401).json({
@@ -16,13 +23,13 @@ exports.autho = (req, res, next) => {
     try {
       const payload = jwt.verify(token, process.env.JWT_SECRET);
       req.user = payload;
-     } catch (err) {
+      next();
+    } catch (err) {
       return res.status(401).json({
         success: false,
         message: "JWT token is invalid or does not exist",
       });
     }
-    next(); 
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -40,7 +47,6 @@ exports.isStudent = (req, res, next) => {
         message: "this is the protected route for students",
       });
     }
-    next();
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -48,6 +54,7 @@ exports.isStudent = (req, res, next) => {
       message: "internal server err",
     });
   }
+  next();
 };
 
 exports.isAdmin = (req, res, next) => {

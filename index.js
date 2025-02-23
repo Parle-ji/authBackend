@@ -1,10 +1,12 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const app = express();
 
 require("dotenv").config();
 const PORT = process.env.PORT;
 
 app.use(express.json());
+app.use(cookieParser());
 
 require("./config/database").dbConnect();
 
